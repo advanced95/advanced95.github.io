@@ -5,7 +5,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Trophy, Play, RotateCcw, Info, ChevronRight, ArrowLeft, ArrowRight, ArrowUp, Target } from 'lucide-react';
+import { Trophy, Play, RotateCcw, Info, ChevronRight } from 'lucide-react';
 
 // --- Constants & Types ---
 
@@ -101,7 +101,6 @@ export default function App() {
   const [lives, setLives] = useState(3);
   const [currentLevel, setCurrentLevel] = useState(0);
   const [bossDifficulty, setBossDifficulty] = useState<'EASY' | 'HARD' | null>(null);
-  const [showBlaster, setShowBlaster] = useState(false);
   
   // Game Logic Refs
   const playerRef = useRef({
@@ -222,7 +221,6 @@ export default function App() {
     
     if (config.hasBoss) {
       playerRef.current.hasBlaster = true;
-      setShowBlaster(true);
       const bossSpeed = difficulty === 'EASY' ? 1 : 2.5;
       bossRef.current = {
         x: 800,
@@ -254,7 +252,6 @@ export default function App() {
       lastShot: 0,
       hasBlaster: config.hasBoss || false
     };
-    setShowBlaster(config.hasBoss || false);
     cameraXRef.current = 0;
     
     if (levelIdx === 0) {
@@ -887,7 +884,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#DA291C] flex items-center justify-center p-4 font-sans text-white">
+    <div className="min-h-screen bg-[#DA291C] flex flex-items-center justify-center p-4 font-sans text-white">
       <div className="relative max-w-4xl w-full bg-white rounded-3xl overflow-hidden shadow-2xl border-8 border-[#FFC72C]">
         
         <canvas 
@@ -897,51 +894,7 @@ export default function App() {
           className="w-full h-auto block"
         />
 
-        {gameState === 'PLAYING' && (
-          <div key="controls-overlay" className="absolute inset-0 pointer-events-none select-none touch-none z-50">
-            <div className="absolute bottom-8 left-8 flex gap-4 pointer-events-auto">
-              <button 
-                className="w-16 h-16 bg-white/30 backdrop-blur-md rounded-2xl flex items-center justify-center border-2 border-white/50 active:bg-white/50 transition-colors"
-                onPointerDown={(e) => { e.preventDefault(); keysRef.current['ArrowLeft'] = true; }}
-                onPointerUp={(e) => { e.preventDefault(); keysRef.current['ArrowLeft'] = false; }}
-                onPointerLeave={(e) => { e.preventDefault(); keysRef.current['ArrowLeft'] = false; }}
-              >
-                <ArrowLeft size={32} />
-              </button>
-              <button 
-                className="w-16 h-16 bg-white/30 backdrop-blur-md rounded-2xl flex items-center justify-center border-2 border-white/50 active:bg-white/50 transition-colors"
-                onPointerDown={(e) => { e.preventDefault(); keysRef.current['ArrowRight'] = true; }}
-                onPointerUp={(e) => { e.preventDefault(); keysRef.current['ArrowRight'] = false; }}
-                onPointerLeave={(e) => { e.preventDefault(); keysRef.current['ArrowRight'] = false; }}
-              >
-                <ArrowRight size={32} />
-              </button>
-            </div>
-            <div className="absolute bottom-8 right-8 flex gap-4 pointer-events-auto items-end">
-              {showBlaster && (
-                <button 
-                  className="w-16 h-16 bg-[#DA291C]/50 backdrop-blur-md rounded-full flex items-center justify-center border-2 border-white/50 active:bg-[#DA291C]/80 transition-colors"
-                  onPointerDown={(e) => { e.preventDefault(); keysRef.current['Space'] = true; }}
-                  onPointerUp={(e) => { e.preventDefault(); keysRef.current['Space'] = false; }}
-                  onPointerLeave={(e) => { e.preventDefault(); keysRef.current['Space'] = false; }}
-                >
-                  <Target size={32} />
-                </button>
-              )}
-              <button 
-                className="w-20 h-20 bg-[#FFC72C]/50 backdrop-blur-md rounded-full flex items-center justify-center border-2 border-white/50 active:bg-[#FFC72C]/80 transition-colors"
-                onPointerDown={(e) => { e.preventDefault(); keysRef.current['ArrowUp'] = true; }}
-                onPointerUp={(e) => { e.preventDefault(); keysRef.current['ArrowUp'] = false; }}
-                onPointerLeave={(e) => { e.preventDefault(); keysRef.current['ArrowUp'] = false; }}
-              >
-                <ArrowUp size={40} />
-              </button>
-            </div>
-          </div>
-        )}
-
-        <AnimatePresence mode="wait">
-
+        <AnimatePresence>
           {gameState === 'START' && (
             <motion.div 
               key="start"
