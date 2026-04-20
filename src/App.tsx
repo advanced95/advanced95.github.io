@@ -101,6 +101,7 @@ export default function App() {
   const [lives, setLives] = useState(3);
   const [currentLevel, setCurrentLevel] = useState(0);
   const [bossDifficulty, setBossDifficulty] = useState<'EASY' | 'HARD' | null>(null);
+  const [showBlaster, setShowBlaster] = useState(false);
   
   // Game Logic Refs
   const playerRef = useRef({
@@ -221,6 +222,7 @@ export default function App() {
     
     if (config.hasBoss) {
       playerRef.current.hasBlaster = true;
+      setShowBlaster(true);
       const bossSpeed = difficulty === 'EASY' ? 1 : 2.5;
       bossRef.current = {
         x: 800,
@@ -252,6 +254,7 @@ export default function App() {
       lastShot: 0,
       hasBlaster: config.hasBoss || false
     };
+    setShowBlaster(config.hasBoss || false);
     cameraXRef.current = 0;
     
     if (levelIdx === 0) {
@@ -884,7 +887,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#DA291C] flex flex-items-center justify-center p-4 font-sans text-white">
+    <div className="min-h-screen bg-[#DA291C] flex items-center justify-center p-4 font-sans text-white">
       <div className="relative max-w-4xl w-full bg-white rounded-3xl overflow-hidden shadow-2xl border-8 border-[#FFC72C]">
         
         <canvas 
@@ -896,41 +899,41 @@ export default function App() {
 
         <AnimatePresence>
           {gameState === 'PLAYING' && (
-            <div className="absolute inset-x-0 bottom-8 px-8 flex justify-between items-end pointer-events-none select-none touch-none">
+            <div key="controls" className="absolute inset-x-0 bottom-8 px-8 flex justify-between items-end pointer-events-none select-none touch-none">
               <div className="flex gap-4 pointer-events-auto">
                 <button 
                   className="w-16 h-16 bg-white/30 backdrop-blur-md rounded-2xl flex items-center justify-center border-2 border-white/50 active:bg-white/50 transition-colors"
-                  onPointerDown={() => keysRef.current['ArrowLeft'] = true}
-                  onPointerUp={() => keysRef.current['ArrowLeft'] = false}
-                  onPointerLeave={() => keysRef.current['ArrowLeft'] = false}
+                  onPointerDown={() => { keysRef.current['ArrowLeft'] = true; }}
+                  onPointerUp={() => { keysRef.current['ArrowLeft'] = false; }}
+                  onPointerLeave={() => { keysRef.current['ArrowLeft'] = false; }}
                 >
                   <ArrowLeft size={32} />
                 </button>
                 <button 
                   className="w-16 h-16 bg-white/30 backdrop-blur-md rounded-2xl flex items-center justify-center border-2 border-white/50 active:bg-white/50 transition-colors"
-                  onPointerDown={() => keysRef.current['ArrowRight'] = true}
-                  onPointerUp={() => keysRef.current['ArrowRight'] = false}
-                  onPointerLeave={() => keysRef.current['ArrowRight'] = false}
+                  onPointerDown={() => { keysRef.current['ArrowRight'] = true; }}
+                  onPointerUp={() => { keysRef.current['ArrowRight'] = false; }}
+                  onPointerLeave={() => { keysRef.current['ArrowRight'] = false; }}
                 >
                   <ArrowRight size={32} />
                 </button>
               </div>
               <div className="flex gap-4 pointer-events-auto">
-                {playerRef.current.hasBlaster && (
+                {showBlaster && (
                   <button 
                     className="w-16 h-16 bg-[#DA291C]/50 backdrop-blur-md rounded-full flex items-center justify-center border-2 border-white/50 active:bg-[#DA291C]/80 transition-colors"
-                    onPointerDown={() => keysRef.current['Space'] = true}
-                    onPointerUp={() => keysRef.current['Space'] = false}
-                    onPointerLeave={() => keysRef.current['Space'] = false}
+                    onPointerDown={() => { keysRef.current['Space'] = true; }}
+                    onPointerUp={() => { keysRef.current['Space'] = false; }}
+                    onPointerLeave={() => { keysRef.current['Space'] = false; }}
                   >
                     <Target size={32} />
                   </button>
                 )}
                 <button 
                   className="w-20 h-20 bg-[#FFC72C]/50 backdrop-blur-md rounded-full flex items-center justify-center border-2 border-white/50 active:bg-[#FFC72C]/80 transition-colors"
-                  onPointerDown={() => keysRef.current['ArrowUp'] = true}
-                  onPointerUp={() => keysRef.current['ArrowUp'] = false}
-                  onPointerLeave={() => keysRef.current['ArrowUp'] = false}
+                  onPointerDown={() => { keysRef.current['ArrowUp'] = true; }}
+                  onPointerUp={() => { keysRef.current['ArrowUp'] = false; }}
+                  onPointerLeave={() => { keysRef.current['ArrowUp'] = false; }}
                 >
                   <ArrowUp size={40} />
                 </button>
