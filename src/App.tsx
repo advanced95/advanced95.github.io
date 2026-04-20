@@ -823,7 +823,11 @@ export default function App() {
       if (p.invulnerable % 10 < 5) {
         ctx.fillStyle = '#E5A04D';
         ctx.beginPath();
-        ctx.roundRect(p.x, p.y, p.width, p.height, 8);
+        if (ctx.roundRect) {
+          ctx.roundRect(p.x, p.y, p.width, p.height, 8);
+        } else {
+          ctx.rect(p.x, p.y, p.width, p.height);
+        }
         ctx.fill();
         ctx.strokeStyle = '#B8860B';
         ctx.lineWidth = 2;
